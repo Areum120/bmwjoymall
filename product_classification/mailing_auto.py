@@ -9,7 +9,8 @@ class EmailSender:
     MY_PW = ''# 앱비밀번호16자리
 
     # 받는사람, 제목, 본문, 첨부파일
-    def send_mail(self, id, pw, recipient, title, text, attachment=False):
+
+    def __init__(self, id, pw, recipient, title, text, attachment=False):
         # 템플릿 생성
         msg = EmailMessage()
 
@@ -38,17 +39,15 @@ class EmailSender:
         # 완료 메시지
         print("발송 성공")
 
-    # 엑셀파일에서 가져온 정보를 활용해 함수 반복 실행
-    wb = load_workbook('email_list.xlsx', data_only=True)
-    ws = wb.active
+# 엑셀파일에서 가져온 정보를 활용해 함수 반복 실행
+wb = load_workbook('email_list.xlsx', data_only=True)
+ws = wb.active
 
-    for row in ws.iter_rows():
-        recipient = row[0].value
-        print(recipient)
-        title = row[1].value
-        text = row[2].value
-        attachment = row[3].value
-        send_mail(recipient, title, text, attachment)
-
-es = EmailSender('**', '**')
+for row in ws.iter_rows():
+    recipient = row[0].value
+    print(recipient)
+    title = row[1].value
+    text = row[2].value
+    attachment = row[3].value
+    es = EmailSender('**', '**', recipient, title, text, attachment)
 

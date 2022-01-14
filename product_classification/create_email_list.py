@@ -80,4 +80,4 @@ def make_filenm_list(df, col, path):
         김기정 드림
         ''' )#함수 호출
 
-make_filenm_list('listOfPartners.xlsx', '브랜드', '.\\data\\')#함수 호출
+make_filenm_list('.\\listOfPartners.xlsx', '브랜드', '.\\data\\')#함수 호출

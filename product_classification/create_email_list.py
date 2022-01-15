@@ -54,8 +54,8 @@ class CreateEmailList:
         # 이메일1 -> recipient 변수명에 저장
 
         recipient=[]
-        # 어차피 22개만 찾아야하므로 다돌릴 필요가 없음
-        for i, row in self.partners[:22].iterrows():#변수 활용
+        # 어차피 file_name 갯수만 찾아야하므로 다돌릴 필요가 없음
+        for i, row in self.partners[:len(self.file_name)].iterrows():#file_name 갯수만큼 돌리기
             # print(i)#0~21
             find_brand = self.partners.loc[self.partners['브랜드'].str.contains(self.file_name[i])]#filenm과 일치하는 '브랜드'칼럼 df 출력, 변수 활용
             # print(find_brand.values)

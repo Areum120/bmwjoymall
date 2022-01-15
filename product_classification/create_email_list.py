@@ -4,9 +4,8 @@ import datetime
 
 class CreateEmailList:
 
-    def __init__(self, df, col, path, title, text):
+    def __init__(self, df, path, title, text):
         self.df = df#data_file
-        self.col = col#칼럼
         self.path = path#경로
         self.title = title#제목
         self.text = text#본문
@@ -21,7 +20,7 @@ class CreateEmailList:
         # print(partners)
 
         # 브랜드 null값 삭제
-        partners = partners.dropna(subset=[self.col])
+        partners = partners.dropna(subset=['브랜드'])
 
         # null값 확인
         # print(partners.isnull().sum())
@@ -85,7 +84,7 @@ now = datetime.datetime.now()  # 지금시간
 nowToday = now.strftime('%m/%d')  # 일자
 
 #인스턴스 생성
-ce = CreateEmailList('.\\listOfPartners.xlsx', '브랜드', '.\\data\\', '[웍스컴바인] BMW JOY MALL ' + f'{nowToday} 상품발주 확인요청의 件', '''\
+ce = CreateEmailList('.\\listOfPartners.xlsx', '.\\data\\', '[웍스컴바인] BMW JOY MALL ' + f'{nowToday} 상품발주 확인요청의 件', '''\
     안녕하세요.
     웍스컴바인 김기정입니다.
     금일자로 주문건 접수되어 출고요청 전달드립니다.

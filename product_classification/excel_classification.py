@@ -72,7 +72,7 @@ class ClassificationExcel:
     def find_product(self):
         path = 'data\\'
         num = list(range(110))
-        for i, row in self.processd_df[:110].iterrows():#가공한 df임
+        for i, row in self.processd_df[:len(self.brands)].iterrows():#brands의 갯수만큼 돌리기
             # print(i)#132개
             # print(brands[i])
             num[i] = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[i])]#brands조회하여 df저장

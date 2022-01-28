@@ -4,9 +4,8 @@ import datetime
 
 class CreateEmailList:
 
-    def __init__(self, df, path, title, text):
+    def __init__(self, df, title, text):
         self.df = df#data_file
-        self.path = path#경로
         self.title = title#제목
         self.text = text#본문
 
@@ -28,7 +27,7 @@ class CreateEmailList:
         self.partners = partners#make_email_list에서 변수로 활용
 
         # data폴더 파일 이름 목록 불러오기
-        file_list = os.listdir(self.path)#경로
+        file_list = os.listdir('.\\data\\')#경로
         # print(file_list)#attachment에 확장자명까지 기입
 
         # 확장자명 제외한 이름 출력
@@ -83,16 +82,18 @@ class CreateEmailList:
 now = datetime.datetime.now()  # 지금시간
 nowToday = now.strftime('%m/%d')  # 일자
 
-#인스턴스 생성
-ce = CreateEmailList('.\\listOfPartners.xlsx', '.\\data\\', '[웍스컴바인] BMW JOY MALL ' + f'{nowToday} 상품발주 확인요청의 件', '''\
-    안녕하세요.
-    웍스컴바인 김기정입니다.
-    금일자로 주문건 접수되어 출고요청 전달드립니다.
-    확인부탁드리겠습니다.
-    항상 많은 도움주셔서 감사드립니다.
-    김기정 드림
-    ''')
+# #인스턴스 생성
+# ce = CreateEmailList('.\\listOfPartners.xlsx', '[웍스컴바인] BMW JOY MALL ' + f'{nowToday} 상품발주 확인요청의 件', '''\
+#     안녕하세요.
+#     웍스컴바인 김기정입니다.
+#     금일자로 주문건 접수되어 출고요청 전달드립니다.
+#     확인부탁드리겠습니다.
+#     항상 많은 도움주셔서 감사드립니다.
+#     김기정 드림
+#     ''')
+# .\\listOfPartners.xlsx파일은 자동입력, 이메일 본문과 제목만 외부에서 정보 입력받기
+# 파트너사 정보를 수정할 일이 있으면 listOfPartners.xlsx 파일을 수정하면 됨
 
-#메소드 호출
-ce.make_filenm_list()
-ce.make_email_list()
+# #메소드 호출
+# ce.make_filenm_list()
+# ce.make_email_list()

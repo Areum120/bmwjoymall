@@ -70,6 +70,8 @@ class ClassificationExcel:
 
     # 각 상품명에 brands 요소가 있는지 모두 확인하여 partners 이름으로 각각 excel 저장 기능
     def find_product(self):
+        # data폴더 자동 생성 기능 추가하기
+
         path = 'data\\'
         num = list(range(110))
         for i, row in self.processd_df[:len(self.brands)].iterrows():#brands의 갯수만큼 돌리기
@@ -81,11 +83,11 @@ class ClassificationExcel:
                 num[i].to_excel(f'{path}{self.partners[i]}.xlsx')#partners 이름으로 excel 저장
     #  brands[i] 갯수와 for문의 i 갯수가 다름, IndexError: list index out of range 해결->[:110]
 
-#인스턴스 생성
-CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners_name.xlsx')
+# #인스턴스 생성
+# CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners_name.xlsx')#sendRequest.xlsx, listOfPartners_name.xlsx 자동입력
 
-#메소드 호출
-CE.make_product_dict()
-CE.find_product()
+# #메소드 호출
+# CE.make_product_dict()
+# CE.find_product()
 
 

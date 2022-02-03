@@ -113,7 +113,7 @@ class UI(QMainWindow, form_class):
         self.pushButton.clicked.connect(self.click_button_1) #xlsx형식변환
         self.pushButton_2.clicked.connect(self.click_button_2) #업체별 주문파일 생성
         self.pushButton_create_email_list.clicked.connect(self.click_button_3) #이메일리스트 생성
-        self.pushButton_send_email.clicked.connect(self.click_button_4)
+        self.pushButton_send_email.clicked.connect(self.click_button_4)#메일 자동 발송
 
 
     def click_button_1(self):
@@ -122,15 +122,15 @@ class UI(QMainWindow, form_class):
 
     def click_button_2(self):
         x2 = Thread2(self)
-        x2.start()  # thread1 run 동작
+        x2.start()  # thread2 run 동작
 
     def click_button_3(self):
         x3 = Thread3(self)
-        x3.start()  # thread1 run 동작
+        x3.start()  # thread3 run 동작
 
     def click_button_4(self):
         x4 = Thread4(self)
-        x4.start()  # thread1 run 동작
+        x4.start()  # thread4 run 동작
 
     # exception 발생시 종료 방지(스레드 켜지기 전에 main이 끝나서 프로그램 종료됨)
     def my_exception_hook(exctype, value, traceback):

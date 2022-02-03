@@ -82,7 +82,7 @@
         <item row="2" column="0">
          <widget class="QLineEdit" name="lineEdit">
           <property name="text">
-           <string>[웍스컴바인] BMW JOY MALL ' + f'{nowToday} 상품발주 확인요청의 件</string>
+           <string>[웍스컴바인] BMW JOY MALL 상품발주 확인요청의 件</string>
           </property>
          </widget>
         </item>

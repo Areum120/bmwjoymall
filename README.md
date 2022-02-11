@@ -21,8 +21,8 @@ dist 폴더에 run.exe 파일 생성 확인
 
 dist 폴더 안에 필수 data file 이동시키기 
 
--listOfPartners.xlsx \n
+-listOfPartners.xlsx 
 
--listOfPartners_name.xlsx \n
+-listOfPartners_name.xlsx 
 
 -sendRequest.xls 

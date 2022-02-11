@@ -7,16 +7,13 @@ from PyQt5 import uic
 from PyQt5.QtCore import *
 
 #패키지 함수 불러오기
-from comtypes import CoInitialize
-
 from product_classification import convert_to_xlsx
 from product_classification import excel_classification
 from product_classification import create_email_list
 from product_classification import mailing_auto
 
-
 # load the ui file
-form_class = uic.loadUiType('collalab_rpa.ui')[0]
+form_class = uic.loadUiType('C:\\Users\\workscombine\\Desktop\\work\\bmwjoymall_rpa\\gui\\collalab_rpa.ui')[0]
 
 # 버튼1 쓰레드 클래스
 class Thread1(QThread):
@@ -115,7 +112,6 @@ class UI(QMainWindow, form_class):
         self.pushButton_create_email_list.clicked.connect(self.click_button_3) #이메일리스트 생성
         self.pushButton_send_email.clicked.connect(self.click_button_4)#메일 자동 발송
 
-
     def click_button_1(self):
         x1 = Thread1(self)
         x1.start()#thread1 run 동작
@@ -139,16 +135,14 @@ class UI(QMainWindow, form_class):
         # Call the normal Exception hook after
         sys._excepthook(exctype, value, traceback)
         # sys.exit(1)
-
     # Back up the reference to the exceptionhook
     sys._excepthook = sys.excepthook
-
     # Set the exception hook to our wrapping function
     sys.excepthook = my_exception_hook
 
 # initialize The App
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    UIWindow = UI()
-    UIWindow.show()
-    app.exec_()
+# if __name__ == "__main__":
+#     app = QApplication(sys.argv)
+#     UIWindow = UI()
+#     UIWindow.show()
+#     app.exec_()

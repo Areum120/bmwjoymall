@@ -13,7 +13,7 @@ from product_classification import create_email_list
 from product_classification import mailing_auto
 
 # load the ui file
-form_class = uic.loadUiType('C:\\Users\\workscombine\\Desktop\\work\\bmwjoymall_rpa\\gui\\collalab_rpa.ui')[0]
+form_class = uic.loadUiType('.\\gui\\collalab_rpa.ui')[0]
 
 # 버튼1 쓰레드 클래스
 class Thread1(QThread):

@@ -11,9 +11,7 @@ cd 폴더 설치 경로
 
 pyinstaller -w -F run.py
 
-## exe build 완료
-
-폴더내 build, dist 폴더 생성
+## build 완료 시
 
 dist 폴더에 run.exe 파일 생성 확인
 

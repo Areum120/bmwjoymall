@@ -24,3 +24,6 @@ dist 폴더 안에 필수 data file 이동시키기
 -listOfPartners_name.xlsx 
 
 -sendRequest.xls 
+
+## 주의 사항
+- 파일명 변경x

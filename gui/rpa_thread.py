@@ -42,7 +42,7 @@ class Thread2(QThread):
 
     def run(self):
         print('thread2 시작')
-        CE = excel_classification.ClassificationExcel('sendRequest.xlsx', 'listOfPartners_name.xlsx')
+        CE = excel_classification.ClassificationExcel('sendRequest.xlsx', 'listOfPartners.xlsx')
         CE.make_product_dict()
         CE.find_product()
         self.sleep(1)

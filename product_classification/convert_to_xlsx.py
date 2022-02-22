@@ -9,4 +9,4 @@ def converToxlsx(fname):
     wb.Close()
     excel.Application.Quit()
 
-# converToxlsx('C:\\Users\\workscombine\\Desktop\\work\\BMWJoymall\\product_classification\\sendRequest.xls')
+converToxlsx('C:\\Users\\workscombine\\Desktop\\work\\BMWJoymall\\product_classification\\sendRequest.xls')

@@ -43,13 +43,21 @@ class ClassificationExcel:
         partners_name = pd.read_excel(self.df2, engine='openpyxl')
         # print(partners_name)
 
+        # '브랜드' 칼럼 결측치있는 행 전체 제거
+        partners_name = partners_name.dropna(axis = 'index', how='any', subset=['브랜드'])
+        print(partners_name)
+
         # /구분자로 분류
         partners_name['partners'] = partners_name['브랜드'].str.split("/")
-        # print(partners_name)
+
+        # 결측치 확인
+        # print(partners_name[partners_name.partners.isnull()])
 
         brands =[]
         partners =[]
         for i, row in partners_name.iterrows():
+            # print(type(row['partners']))#float 형식이 하나 있어서 타입 오류 발생함
+            # print(row['partners'])
             brands.append(row['partners'][0])
             if len(row['partners']) ==1:#요소가1개이면
                 partners.append(row['partners'][0])#1번째요소=협력사
@@ -61,9 +69,9 @@ class ClassificationExcel:
 
         # print(partners_dict)
         print(brands)
-        # print(len(brands))#110개
+        print(len(brands))#110개
         print(partners)
-        # print(len(partners))#110개
+        print(len(partners))#110개
 
         self.brands = brands#find_product에서 활용
         self.partners = partners#find_product에서 활용
@@ -84,8 +92,8 @@ class ClassificationExcel:
     #  brands[i] 갯수와 for문의 i 갯수가 다름, IndexError: list index out of range 해결->[:110]
 
 # #인스턴스 생성
-# CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners_name.xlsx')#sendRequest.xlsx, listOfPartners_name.xlsx 자동입력
-
+# CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners.xlsx')#sendRequest.xlsx, listOfPartners_name.xlsx->listOfPartners 자동입력
+#
 # #메소드 호출
 # CE.make_product_dict()
 # CE.find_product()

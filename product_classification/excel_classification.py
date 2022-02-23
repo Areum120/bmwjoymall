@@ -82,8 +82,8 @@ class ClassificationExcel:
 
         path = 'data\\'
         num = list(range(110))
-        for i, row in self.processd_df.iterrows():#brands의 갯수만큼 돌리기
-           for j in range(len(self.brands)):
+        for i, row in self.processd_df.iterrows():#엑셀 주문 건수 갯수만큼 돌리기
+           for j in range(len(self.brands)):#brands의 갯수만큼 돌리기
                print(self.brands[j])
                num[j] = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j])]#brands조회하여 df저장
                print(num[j])

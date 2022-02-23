@@ -45,7 +45,7 @@ class ClassificationExcel:
 
         # '브랜드' 칼럼 결측치있는 행 전체 제거
         partners_name = partners_name.dropna(axis = 'index', how='any', subset=['브랜드'])
-        print(partners_name)
+        # print(partners_name)
 
         # /구분자로 분류
         partners_name['partners'] = partners_name['브랜드'].str.split("/")
@@ -69,9 +69,9 @@ class ClassificationExcel:
 
         # print(partners_dict)
         print(brands)
-        print(len(brands))#110개
+        # print(len(brands))#110개
         print(partners)
-        print(len(partners))#110개
+        # print(len(partners))#110개
 
         self.brands = brands#find_product에서 활용
         self.partners = partners#find_product에서 활용
@@ -82,20 +82,21 @@ class ClassificationExcel:
 
         path = 'data\\'
         num = list(range(110))
-        for i, row in self.processd_df[:len(self.brands)].iterrows():#brands의 갯수만큼 돌리기
-            # print(i)#132개
-            # print(brands[i])
-            num[i] = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[i])]#brands조회하여 df저장
-            if len(num[i]) != 0:#df가 비어 있지 않으면
-                self.partners[i] == num[i]#파트너사 변수 입력
-                num[i].to_excel(f'{path}{self.partners[i]}.xlsx')#partners 이름으로 excel 저장
+        for i, row in self.processd_df.iterrows():#brands의 갯수만큼 돌리기
+           for j in range(len(self.brands)):
+               print(self.brands[j])
+               num[j] = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j])]#brands조회하여 df저장
+               print(num[j])
+               if len(num[j]) != 0:#df가 비어 있지 않으면
+                    self.partners[j] == num[j]#파트너사 변수 입력
+                    num[j].to_excel(f'{path}{self.partners[j]}.xlsx')#partners 이름으로 excel 저장
     #  brands[i] 갯수와 for문의 i 갯수가 다름, IndexError: list index out of range 해결->[:110]
 
-# #인스턴스 생성
-# CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners.xlsx')#sendRequest.xlsx, listOfPartners_name.xlsx->listOfPartners 자동입력
-#
-# #메소드 호출
-# CE.make_product_dict()
-# CE.find_product()
+#인스턴스 생성
+CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners.xlsx')#sendRequest.xlsx, listOfPartners_name.xlsx->listOfPartners 자동입력
+
+#메소드 호출
+CE.make_product_dict()
+CE.find_product()
 
 

@@ -92,11 +92,11 @@ class ClassificationExcel:
                     num[j].to_excel(f'{path}{self.partners[j]}.xlsx')#partners 이름으로 excel 저장
     #  brands[i] 갯수와 for문의 i 갯수가 다름, IndexError: list index out of range 해결->[:110]
 
-#인스턴스 생성
-CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners.xlsx')#sendRequest.xlsx, listOfPartners_name.xlsx->listOfPartners 자동입력
-
-#메소드 호출
-CE.make_product_dict()
-CE.find_product()
+# #인스턴스 생성
+# CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners.xlsx')#sendRequest.xlsx, listOfPartners_name.xlsx->listOfPartners 자동입력
+#
+# #메소드 호출
+# CE.make_product_dict()
+# CE.find_product()
 
 

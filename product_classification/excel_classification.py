@@ -47,31 +47,26 @@ class ClassificationExcel:
         partners_name = partners_name.dropna(axis = 'index', how='any', subset=['브랜드'])
         # print(partners_name)
 
-        # /구분자로 분류
-        partners_name['partners'] = partners_name['브랜드'].str.split("/")
+        # 브랜드 list 생성
+        brands = partners_name['브랜드'].str.split('/').tolist()
+
+        # 업체명 list 생성
+        partners = partners_name['업체명'].tolist()
+
+        print(brands)
+        print(partners)
+        print(len(brands))#115개
+        print(len(partners))#115개
 
         # 결측치 확인
         # print(partners_name[partners_name.partners.isnull()])
 
-        brands =[]
-        partners =[]
-        for i, row in partners_name.iterrows():
-            # print(type(row['partners']))#float 형식이 하나 있어서 타입 오류 발생함
-            # print(row['partners'])
-            brands.append(row['partners'][0])
-            if len(row['partners']) ==1:#요소가1개이면
-                partners.append(row['partners'][0])#1번째요소=협력사
-            else: #요소가2개이면
-                partners.append(row['partners'][1])#2번째요소=협력사
-        # partners_dict = dict(zip(brands, partners))# dict 변환
+        # dict 변환
+        # partners_dict = dict(zip(brands, partners))
         # for key in partners_dict:
         # print(key, ':', partners_dict[key])# key,value 출력
 
         # print(partners_dict)
-        print(brands)
-        # print(len(brands))#110개
-        print(partners)
-        # print(len(partners))#110개
 
         self.brands = brands#find_product에서 활용
         self.partners = partners#find_product에서 활용
@@ -81,16 +76,19 @@ class ClassificationExcel:
         # data폴더 자동 생성 기능 추가하기
 
         path = 'data\\'
-        num = list(range(110))
+        num = list(range(len(self.brands)))
         for i, row in self.processd_df.iterrows():#엑셀 주문 건수 갯수만큼 돌리기
+           # print(row)
            for j in range(len(self.brands)):#brands의 갯수만큼 돌리기
-               print(self.brands[j])
-               num[j] = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j])]#brands조회하여 df저장
-               print(num[j])
-               if len(num[j]) != 0:#df가 비어 있지 않으면
-                    self.partners[j] == num[j]#파트너사 변수 입력
-                    num[j].to_excel(f'{path}{self.partners[j]}.xlsx')#partners 이름으로 excel 저장
-    #  brands[i] 갯수와 for문의 i 갯수가 다름, IndexError: list index out of range 해결->[:110]
+               # print(self.brands[j][0])#리스트의 값만 뽑기
+               # print(row['상품명'])
+               if self.brands[j][0] in row['상품명']:#전체 df 상품명에서 brands 값명이 있으면
+                   num[j] = row #df를 num[j]에 저장
+                   print(num[j])
+                   if len(num[j]) != 0:#df가 비어 있지 않으면
+                       self.partners[j] == num[j]#파트너사 변수와 1:1 맵핑
+                       num[j].to_excel(f'{path}{self.partners[j]}.xlsx')#partners 이름으로 excel 저장
+
 
 # #인스턴스 생성
 # CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners.xlsx')#sendRequest.xlsx, listOfPartners_name.xlsx->listOfPartners 자동입력

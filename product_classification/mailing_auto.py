@@ -21,16 +21,19 @@ class SendEmail:
         for row in ws.iter_rows():
             recipient = row[0].value
             print(recipient)
-            title = row[1].value
-            text = row[2].value
-            attachment = row[3].value
+            recipient2 = row[1].value
+            title = row[2].value
+            text = row[3].value
+            attachment = row[4].value
 
             # 템플릿 생성
             msg = EmailMessage()
 
-            # 보내는 사람 / 받는 사람 / 제목 입력
+            # 보내는 사람 / 받는 사람 / 참조 이메일 / 제목 입력
             msg["From"] = self.id
             msg["To"] = recipient.split(",")
+            if recipient2 is not None:#참조이메일이 비어 있지 않으면 (!="")라고 할 경우 error 발생 AttributeError: 'NoneType' object has no attribute 'split'
+               msg["Cc"] = recipient2.split("/")#슬래시 구분해서 input
             msg["Subject"] = title
 
             # 본문 구성
@@ -50,8 +53,8 @@ class SendEmail:
             print("발송 성공")
 
 # #인스턴스 생성
-# es = SendEmail('**', '**', 'email_list.xlsx')#생성된 이메일리스트 따로 입력하지 않아도 자동입력, 계정 pw만 외부에서 입력받기
-
+# es = SendEmail('tjfsu120@gmail.com', 'lkpwbqanankfmlaq', 'email_list.xlsx')#생성된 이메일리스트 따로 입력하지 않아도 자동입력, 계정 pw만 외부에서 입력받기
+#
 # #메소드 호출
 # es.send_email()
 

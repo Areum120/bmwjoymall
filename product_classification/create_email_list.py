@@ -42,7 +42,7 @@ class CreateEmailList:
                         file_name.append(file[:i])
                         break
         print(file_name)
-        # print(len(file_name))#22개
+        print(len(file_name))#22개
 
         self.file_name = file_name#make_email_list에서 변수로 활용
         self.file_list = file_list#make_email_list에서 변수로 활용
@@ -53,21 +53,33 @@ class CreateEmailList:
         # 이메일1 -> recipient 변수명에 저장
 
         recipient=[]
+        recipient2 = []
+        email_list = list(range(len(self.file_name)))
+        email2_list = list(range(len(self.file_name)))
         # 어차피 file_name 갯수만 찾아야하므로 다돌릴 필요가 없음
-        for i, row in self.partners[:len(self.file_name)].iterrows():#file_name 갯수만큼 돌리기
-            # print(i)#0~21
-            find_brand = self.partners.loc[self.partners['브랜드'].str.contains(self.file_name[i])]#filenm과 일치하는 '브랜드'칼럼 df 출력, 변수 활용
-            # print(find_brand.values)
-            find_brand_list = find_brand.values.tolist()#행값 리스트 만들기
-            recipient.append(find_brand_list[0][6])#이메일1만 추출해서 담기
-        # print(recipient)
+        for i, row in self.partners.iterrows():#file_name 갯수만큼 돌리기
+            # print(row)#0~5
+            # print(row['참조이메일'])
+            for j in range(len(self.file_name)):
+                # print(self.file_name[j])
+                # print(row['업체명'])
+                if self.file_name[j] in row['업체명']:
+                    recipient.append(row['이메일1'])#이메일1만 추출해서 담기
+                    recipient2.append(row['참조이메일'])#참조이메일만 추출해서 담기
+            # find_brand = self.partners.loc[self.partners['브랜드'].str.contains(self.file_name[i])]#filenm과 일치하는 '브랜드'칼럼 df 출력, 변수 활용
+            # print(find_brand)
+            # find_brand_email = find_brand['이메일1']
+            # recipient.append(find_brand_email)#이메일1만 추출해서 담기
+        print(recipient) #이메일
+        print(recipient2) #참조이메일
 
         # 불러온 파일명은 그대로 첨부파일 명에 기재
         attachment = self.file_list#변수 활용
 
         # df 생성(recipient, title, text, attachment)
         table_name = {
-            'recipient':recipient,
+            'recipient':recipient,#수신자
+            'recipient2': recipient2,#참조이메일
             'title': self.title,# title 동일
             'text': self.text,# text 동일
             'attachment': attachment
@@ -79,10 +91,10 @@ class CreateEmailList:
         email_list.to_excel('email_list.xlsx', index=False, header=False)
         print('파일 생성 완료')
 
-now = datetime.datetime.now()  # 지금시간
-nowToday = now.strftime('%m/%d')  # 일자
+# now = datetime.datetime.now()  # 지금시간
+# nowToday = now.strftime('%m/%d')  # 일자
 
-# #인스턴스 생성
+#인스턴스 생성
 # ce = CreateEmailList('.\\listOfPartners.xlsx', '[웍스컴바인] BMW JOY MALL ' + f'{nowToday} 상품발주 확인요청의 件', '''\
 #     안녕하세요.
 #     웍스컴바인 김기정입니다.
@@ -94,6 +106,6 @@ nowToday = now.strftime('%m/%d')  # 일자
 # .\\listOfPartners.xlsx파일은 자동입력, 이메일 본문과 제목만 외부에서 정보 입력받기
 # 파트너사 정보를 수정할 일이 있으면 listOfPartners.xlsx 파일을 수정하면 됨
 
-# #메소드 호출
+#메소드 호출
 # ce.make_filenm_list()
 # ce.make_email_list()

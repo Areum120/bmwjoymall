@@ -45,6 +45,7 @@ class Thread2(QThread):
         CE = excel_classification.ClassificationExcel('sendRequest.xlsx', 'listOfPartners.xlsx')
         CE.make_product_dict()
         CE.find_product()
+        CE.set_excel_form()
         self.sleep(1)
         print('thread2 완료')
 

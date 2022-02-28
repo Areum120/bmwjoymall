@@ -1,7 +1,9 @@
 import pandas as pd
 import datetime
-from openpyxl.styles import Font
-from openpyxl import load_workbook
+import os
+from openpyxl import workbook, load_workbook
+from openpyxl.utils import get_column_letter
+from openpyxl.styles import Alignment, Font, Border, Side, PatternFill #엑셀 스타일
 
 class ClassificationExcel:
     #Constructor
@@ -50,15 +52,17 @@ class ClassificationExcel:
         # print(partners_name)
 
         # 브랜드 list 생성
-        brands = partners_name['브랜드'].str.split('/').tolist()
+        brands_parsing = partners_name['브랜드'].str.split('/')
+        # print(brands_parsing)
+        brands = brands_parsing.tolist()
 
         # 업체명 list 생성
         partners = partners_name['업체명'].tolist()
 
-        print(brands)
-        print(partners)
-        print(len(brands))#115개
-        print(len(partners))#115개
+        # print(brands)
+        # print(partners)
+        # print(len(brands))#115개
+        # print(len(partners))#115개
 
         # 결측치 확인
         # print(partners_name[partners_name.partners.isnull()])
@@ -82,59 +86,99 @@ class ClassificationExcel:
 
         self.path = 'data\\'
         for i, row in self.processd_df.iterrows():#엑셀 주문 건수 갯수만큼 돌리기
-           # print(i, row)
+           # print(row)#모든 주문건수 출력(세로)
+           # 문제: 2가지 브랜드가 들어간 업체명 추출이 안됨, 각 브랜드 주문건수 1건만 들어감
            for j in range(len(self.brands)):#brands의 갯수만큼 돌리기
-               # print(self.brands[j][0])#리스트의 값만 뽑기
-               # print(row['상품명'])
-               if self.brands[j][0] in row['상품명']:#전체 df 상품명에서 brands 값명이 있으면
-                   # df 생성(recipient, title, text, attachment)
-                   table_name = {#엑셀 세로로 저장되는 문제 가로로 저장하기 위한 1:1 딕셔너리 맵핑
-                       '주문번호': row['주문번호'],
-                       '상품번호': row['상품번호'],
-                       '상품코드': row['상품코드'],
-                       '바코드': row['바코드'],
-                       '주문자': row['주문자'],
-                       '수령인': row['수령인'],
-                       '전화번호': row['전화번호'],
-                       '핸드폰': row['핸드폰'],
-                       '상품명': row['상품명'],
-                       '옵션': row['옵션'],
-                       '수량': row['수량'],
-                       '판매가격': row['판매가격'],
-                       '옵션가격': row['옵션가격'],
-                       '총판매가격': row['총판매가격'],
-                       '배송비구분': row['배송비구분'],
-                       '배송비': row['배송비'],
-                       '무료배송금액': row['무료배송금액'],
-                       '실 배송비': row['실 배송비'],
-                       '주문일': row['주문일'],
-                       '주소': row['주소'],
-                       '주문시요구사항': row['주문시요구사항'],
-                   }
-                   excel_table = pd.DataFrame(table_name, index=[0])
-                   print(excel_table)
-                   if len(excel_table) != 0:#df가 비어 있지 않으면
-                       self.partners[j] == excel_table#파트너사 변수와 1:1 맵핑
-                       excel_table.to_excel(f'{self.path}[웍스컴바인]발주요청서_{self.nowToday}_{self.partners[j]}.xlsx', index=False)#partners 이름으로 excel 저장, index없이 저장
+               if len(self.brands[j]) ==1:#브랜드명 요소가 1개이면
+                   if self.brands[j][0] in row['상품명']:  # 전체 df 상품명에서 brands 값명이 있으면
+                       first_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][0])]
+                       # print(first_df)#여기까지는 모든 data가 나옴
+                       if len(first_df) != 0:  # df가 비어 있지 않으면
+                           self.partners[j] == first_df  # 파트너사 변수와 1:1 맵핑
+                           first_df.to_excel(f'{self.path}[웍스컴바인]발주요청서_{self.nowToday}_{self.partners[j]}.xlsx',
+                                                index=False)  # partners 이름으로 excel 저장, index없이 저장
+               elif len(self.brands[j]) ==2:#브랜드 요소가 2개이상이면
+                   # print(self.brands[j][1])  # 리스트의 두번째 요소만 뽑기
+                   if self.brands[j][0] in row['상품명'] or self.brands[j][1] in row['상품명']:  # 전체 df 상품명에서 brands 값명이 있으면
+                       second_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][0])]#0번째 요소 일치한 df 출력
+                       third_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][1])]#1번째 요소 일치한 df 출력
+                       sum_df = pd.concat([second_df, third_df]) #2개 데이터프레임 병합
+                       if len(sum_df) != 0:  # df가 비어 있지 않으면
+                           self.partners[j] == sum_df  # 파트너사 변수와 1:1 맵핑
+                           sum_df.to_excel(f'{self.path}[웍스컴바인]발주요청서_{self.nowToday}_{self.partners[j]}.xlsx',
+                                                index=False)  # partners 이름으로 excel 저장, index없이 저장
 
-    # 저장한 주문파일 엑셀 시트 내용 수정하기
-    # def change_excel_sheet(self):
-    #     # 폴더 안의 엑셀 파일 하나씩 불러오기
-    #     wb = load_workbook(f'{self.path}[웍스컴바인]발주요청서_2022-02-24_AUTOCOS.xlsx')#엑셀파일 가져오기
-    #     ws = wb.active #활성화
-    #     # 1,2행을 새로 삽입한다
-    #     # 전체 행 개수를 세서 num 변수에 삽입
-    #     # 1행에 f'발송요청내역 [총 {num}건, 1 페이지] {self.nowToday}'
-    #     # 열 너비를 설정
-    #     ws.columns_dimensions[['A']['U']].width = 15
-    #     wb.save(f'{self.path}[웍스컴바인]발주요청서_2022-02-24_AUTOCOS.xlsx')
+               elif len(self.brands[j]) ==3:#브랜드 요소가 3개이상이면
+               #     print(self.brands[j][2])  # 리스트의 세번째 요소만 뽑기
+                   if self.brands[j][0] in row['상품명'] or self.brands[j][1] in row['상품명'] or self.brands[j][2] in row['상품명']:  # 전체 df 상품명에서 brands 값명이 있으면
+                       four_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][0])]#0번째 요소 일치한 df 출력
+                       fifth_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][1])]#1번째 요소 일치한 df 출력
+                       sixth_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][2])]#2번째 요소 일치한 df 출력
+                       sum2_df = pd.concat([four_df, fifth_df, sixth_df])#3개 데이터프레임 병합
+                       print(sum2_df)
+                       if len(sum2_df) != 0:  # df가 비어 있지 않으면
+                           self.partners[j] == sum2_df  # 파트너사 변수와 1:1 맵핑
+                           sum2_df.to_excel(f'{self.path}[웍스컴바인]발주요청서_{self.nowToday}_{self.partners[j]}.xlsx',
+                                                index=False)  # partners 이름으로 excel 저장, index없이 저장
+
+    # 저장한 주문파일 엑셀 폼 설정
+    def set_excel_form(self):
+        # 폴더 안의 엑셀 파일 하나씩 불러오기
+
+        file_list = os.listdir(self.path)#path폴더에 있는 파일을 리스트로 받기
+        print(file_list)
+
+        for file_name_raw in file_list:
+            file_name =  f'{self.path}'+file_name_raw
+            wb = load_workbook(filename=file_name)#엑셀파일 가져오기
+            ws = wb.active #활성화
 
 
-#인스턴스 생성
-CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners.xlsx')#sendRequest.xlsx, listOfPartners_name.xlsx->listOfPartners 자동입력
+            # A1내용 삽입
+            m_row = ws.max_row - 1  # 주문 건수 세기(칼럼행 제외)
+            print(m_row)
+            # 1,2행을 새로 삽입한다
+            ws.insert_rows(1)
+            ws.insert_rows(2)
+            ws['A1'].value = f'발송요청내역 [총 {m_row}건, 1페이지] {self.nowToday}' # 전체 행 개수를 세서 num 변수에 삽입
+            f = Font(size=11, bold=True)# 1행 폰트 크기 11, bold
+            ws['A1'].font = f
+            # # A열 설정
+            ws.merge_cells('A1:U1') #셀병합
+            ws['A1'].alignment = Alignment(horizontal='left') #왼쪽 정렬
+            f2 = Font(size=9)
 
-#메소드 호출
-CE.make_product_dict()
-CE.find_product()
-# CE.change_excel_sheet()
+            # 3, 4행 설정
+            for row in ws.rows:
+                for cell in row:
+                    if cell.row != 1 and cell.row != 2:  # 1,2행 제외
+                        cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True) # 셀의 너비에 맞게 자동 줄바꿈, 모두 가운데 정렬
+                        cell.fill = PatternFill(fgColor='ffffcc', fill_type='solid')#노란색 채우기
+                        cell.font = Font(size=9)#3행부터 폰트크기 9
+                        cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+                        if cell.row == 3: #3행이면
+                            cell.alignment = Alignment(horizontal='center', vertical='center', shrink_to_fit=True, wrap_text=False)#줄바꿈 제외, 셀 크기에 맞게 글자 축소
+                            cell.font = Font(bold=True)  # 볼드체
+                            cell.fill = PatternFill(fgColor='c0c0c0', fill_type='solid')#회색 채우기
 
+            # 열 너비 설정
+            columns_15 = [1,21]
+            columns_35 = [9,10,20]
+            columns_10 = [2,3,4,5,6,7,8,11,12,13,14,15,16,17,18,19]
+            for col in range(len(columns_15)):
+                ws.column_dimensions[get_column_letter(columns_15[col])].width = 15#A, U, 15로 하면 14.38이 됨
+            for col in range(len(columns_35)):
+                ws.column_dimensions[get_column_letter(columns_35[col])].width = 35
+            for col in range(len(columns_10)):
+                ws.column_dimensions[get_column_letter(columns_10[col])].width = 10
+                #wb.save(f'{self.path}[웍스컴바인]발주요청서_2022-02-24_AUTOCOS.xlsx')#예시
+            wb.save(f'{self.path}'+file_name_raw)
+            print('엑셀폼 변경 완료')
+
+# #인스턴스 생성
+# CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners.xlsx')#sendRequest.xlsx, listOfPartners_name.xlsx->listOfPartners 자동입력
+#
+# #메소드 호출
+# CE.make_product_dict()
+# CE.find_product()
+# CE.set_excel_form()

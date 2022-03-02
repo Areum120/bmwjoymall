@@ -90,30 +90,30 @@ class ClassificationExcel:
            # 문제: 2가지 브랜드가 들어간 업체명 추출이 안됨, 각 브랜드 주문건수 1건만 들어감
            for j in range(len(self.brands)):#brands의 갯수만큼 돌리기
                if len(self.brands[j]) ==1:#브랜드명 요소가 1개이면
-                   if self.brands[j][0] in row['상품명']:  # 전체 df 상품명에서 brands 값명이 있으면
-                       first_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][0])]
-                       # print(first_df)#여기까지는 모든 data가 나옴
-                       if len(first_df) != 0:  # df가 비어 있지 않으면
-                           self.partners[j] == first_df  # 파트너사 변수와 1:1 맵핑
+                   # if row['상품명'].startswith(self.brands[j][0]):
+                   if self.brands[j][0] in row['상품명']:  # 전체 df 상품명에서 brands 값명이 있으면, 더클래스가 '차바치 더클래스'가 있는 주문을 제외하고
+                       first_df = self.processd_df.loc[self.processd_df['상품명'].str.startswith(self.brands[j][0])]
+                       print(first_df)#여기까지는 모든 data가 나옴
+                       if len(first_df) !=0:  # df가 비어 있지 않으면
+                           self.partners[j] == first_df #파트너사 변수와 1:1 맵핑
                            first_df.to_excel(f'{self.path}[웍스컴바인]발주요청서_{self.nowToday}_{self.partners[j]}.xlsx',
                                                 index=False)  # partners 이름으로 excel 저장, index없이 저장
                elif len(self.brands[j]) ==2:#브랜드 요소가 2개이상이면
                    # print(self.brands[j][1])  # 리스트의 두번째 요소만 뽑기
                    if self.brands[j][0] in row['상품명'] or self.brands[j][1] in row['상품명']:  # 전체 df 상품명에서 brands 값명이 있으면
-                       second_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][0])]#0번째 요소 일치한 df 출력
-                       third_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][1])]#1번째 요소 일치한 df 출력
+                       second_df = self.processd_df.loc[self.processd_df['상품명'].str.startswith(self.brands[j][0])]#0번째 요소 일치한 df 출력
+                       third_df = self.processd_df.loc[self.processd_df['상품명'].str.startswith(self.brands[j][1])]#1번째 요소 일치한 df 출력
                        sum_df = pd.concat([second_df, third_df]) #2개 데이터프레임 병합
                        if len(sum_df) != 0:  # df가 비어 있지 않으면
                            self.partners[j] == sum_df  # 파트너사 변수와 1:1 맵핑
                            sum_df.to_excel(f'{self.path}[웍스컴바인]발주요청서_{self.nowToday}_{self.partners[j]}.xlsx',
                                                 index=False)  # partners 이름으로 excel 저장, index없이 저장
-
                elif len(self.brands[j]) ==3:#브랜드 요소가 3개이상이면
                #     print(self.brands[j][2])  # 리스트의 세번째 요소만 뽑기
                    if self.brands[j][0] in row['상품명'] or self.brands[j][1] in row['상품명'] or self.brands[j][2] in row['상품명']:  # 전체 df 상품명에서 brands 값명이 있으면
-                       four_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][0])]#0번째 요소 일치한 df 출력
-                       fifth_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][1])]#1번째 요소 일치한 df 출력
-                       sixth_df = self.processd_df.loc[self.processd_df['상품명'].str.contains(self.brands[j][2])]#2번째 요소 일치한 df 출력
+                       four_df = self.processd_df.loc[self.processd_df['상품명'].str.startswith(self.brands[j][0])]#0번째 요소 일치한 df 출력
+                       fifth_df = self.processd_df.loc[self.processd_df['상품명'].str.startswith(self.brands[j][1])]#1번째 요소 일치한 df 출력
+                       sixth_df = self.processd_df.loc[self.processd_df['상품명'].str.startswith(self.brands[j][2])]#2번째 요소 일치한 df 출력
                        sum2_df = pd.concat([four_df, fifth_df, sixth_df])#3개 데이터프레임 병합
                        print(sum2_df)
                        if len(sum2_df) != 0:  # df가 비어 있지 않으면
@@ -132,7 +132,6 @@ class ClassificationExcel:
             file_name =  f'{self.path}'+file_name_raw
             wb = load_workbook(filename=file_name)#엑셀파일 가져오기
             ws = wb.active #활성화
-
 
             # A1내용 삽입
             m_row = ws.max_row - 1  # 주문 건수 세기(칼럼행 제외)
@@ -166,16 +165,17 @@ class ClassificationExcel:
             columns_35 = [9,10,20]
             columns_10 = [2,3,4,5,6,7,8,11,12,13,14,15,16,17,18,19]
             for col in range(len(columns_15)):
-                ws.column_dimensions[get_column_letter(columns_15[col])].width = 15#A, U, 15로 하면 14.38이 됨
+                ws.column_dimensions[get_column_letter(columns_15[col])].width = 17#A, U, 15로 하면 14.38이 됨
             for col in range(len(columns_35)):
-                ws.column_dimensions[get_column_letter(columns_35[col])].width = 35
+                ws.column_dimensions[get_column_letter(columns_35[col])].width = 38
             for col in range(len(columns_10)):
-                ws.column_dimensions[get_column_letter(columns_10[col])].width = 10
+                ws.column_dimensions[get_column_letter(columns_10[col])].width = 12
                 #wb.save(f'{self.path}[웍스컴바인]발주요청서_2022-02-24_AUTOCOS.xlsx')#예시
             wb.save(f'{self.path}'+file_name_raw)
             print('엑셀폼 변경 완료')
 
-# #인스턴스 생성
+#인스턴스 생성
+
 # CE = ClassificationExcel('sendRequest.xlsx', 'listOfPartners.xlsx')#sendRequest.xlsx, listOfPartners_name.xlsx->listOfPartners 자동입력
 #
 # #메소드 호출

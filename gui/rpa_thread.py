@@ -10,7 +10,8 @@ from PyQt5.QtCore import *
 from product_classification import convert_to_xlsx
 from product_classification import excel_classification
 from product_classification import create_email_list
-from product_classification import mailing_auto
+# from product_classification import mailing_auto #smtp
+from product_classification import mailing_auto_outlook #outlook
 
 # load the ui file
 form_class = uic.loadUiType('..\\gui\\collalab_rpa.ui')[0]
@@ -82,10 +83,20 @@ class Thread4(QThread):
 
     def run(self):
         print('thread4 시작')
-        id = self.parent.line_text_2.text()
-        pw = self.parent.line_text_3.text()
-        es = mailing_auto.SendEmail(id, pw, 'email_list.xlsx')
-        es.send_email()#Username and Password not accepted 에러 앱비밀번호 재수정
+        # mailing_auto id, pw
+        # id = self.parent.line_text_2.text()
+        # pw = self.parent.line_text_3.text()
+
+        # mailing_auto_outlook
+        pythoncom.CoInitialize()
+        path2 = os.getcwd() + '\\' + 'email_list.xlsx'
+        SOE = mailing_auto_outlook.send_outlook_email(path2)
+        SOE.load_excel()
+        SOE.send_email()
+
+        # mailing_auto
+        # es = mailing_auto.SendEmail(id, pw, 'email_list.xlsx')
+        # es.send_email()#Username and Password not accepted 에러 앱비밀번호 재수정
         self.sleep(1)
         print('thread4 완료')
 

@@ -31,9 +31,9 @@ class SendEmail:
 
             # 보내는 사람 / 받는 사람 / 참조 이메일 / 제목 입력
             msg["From"] = self.id
-            msg["To"] = recipient.split(",")
+            msg["To"] = recipient.split(',')
             if recipient2 is not None:#참조이메일이 비어 있지 않으면 (!="")라고 할 경우 error 발생 AttributeError: 'NoneType' object has no attribute 'split'
-               msg["Cc"] = recipient2.split("/")#슬래시 구분해서 input
+               msg["Cc"] = recipient2.split('/')#슬래시 구분해서 input
             msg["Subject"] = title
 
             # 본문 구성
@@ -54,7 +54,6 @@ class SendEmail:
 
 # #인스턴스 생성
 # es = SendEmail('tjfsu120@gmail.com', 'lkpwbqanankfmlaq', 'email_list.xlsx')#생성된 이메일리스트 따로 입력하지 않아도 자동입력, 계정 pw만 외부에서 입력받기
-#
 # #메소드 호출
 # es.send_email()
 

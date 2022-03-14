@@ -41,8 +41,8 @@ class CreateEmailList:
                     if file[i]=='.':
                         file_name.append(file[:i])
                         break
-        print(file_name)
-        print(len(file_name))#22개
+        # print(file_name)
+        # print(len(file_name))#22개
 
         self.file_name = file_name#make_email_list에서 변수로 활용
         self.file_list = file_list#make_email_list에서 변수로 활용
@@ -51,23 +51,30 @@ class CreateEmailList:
         # email_list df 만들기
         # 불러온 파일 업체명이 partners의 '브랜드' 업체명과 일치하면
         # 이메일1 -> recipient 변수명에 저장
-
         recipient= []
         recipient2 =[]
         # 어차피 file_name 갯수만 찾아야하므로 다돌릴 필요가 없음
         for i, row in self.partners[:len(self.file_name)].iterrows():#file_name 갯수만큼 돌리기
             # print(row)#0~5
             # print(row['참조이메일'])
-            partners_name = self.file_name[i][24:]
+            partners_name = self.file_name[i][24:]#파일명 뒤에 브랜드명만 나오게 하기
             # print(partners_name)#업체명만
             find_brand = self.partners.loc[self.partners['업체명'].str.contains(partners_name)]#filenm과 일치하는 '업체명'칼럼 df 출력, 변수 활용
-            # print(find_brand)
-            find_brand_email = find_brand['이메일1'].values[0]#이메일1값만 추출
-            recipient.append(find_brand_email)#이메일1만 추출해서 담기
-            find_brand_CC_email = find_brand['참조이메일'].values[0]#참조이메일 값만 추출
+            find_brand_email = find_brand['이메일1'].values.tolist()#이메일1만 추출
+            if len(find_brand_email) == 0:
+                find_brand_email.append('없음')
+                print(find_brand_email)
+                recipient.append(find_brand_email[0])
+            else:
+                recipient.append(find_brand_email[0])#값만 추출해서 담기
+        # print(recipient)
+            find_brand_CC_email = find_brand['참조이메일'].tolist()#참조이메일 값만 추출
             print(find_brand_CC_email)
-            if find_brand_CC_email != None:
-               recipient2.append(find_brand_CC_email)
+            if len(find_brand_CC_email) == 0:
+                find_brand_CC_email.append('없음')
+                recipient2.append(find_brand_CC_email[0])
+            else:
+                recipient2.append(find_brand_CC_email[0])
         print(recipient) #이메일
         print(recipient2) #참조이메일
 
@@ -83,7 +90,8 @@ class CreateEmailList:
             'attachment': attachment
         }
         email_list = pd.DataFrame(table_name)
-        print(email_list)
+        # print(email_list)
+
 
         # 인덱스 컬럼 없이 값만 엑셀 저장
         email_list.to_excel('email_list.xlsx', index=False, header=False)

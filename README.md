@@ -1,6 +1,6 @@
 # bmw joy mall RPA 개발
 
-## 쇼핑몰 상품 주문 요청서 엑셀파일 자동 생성 및 메일 자동화 기능 프로그램 개발
+## 쇼핑몰 상품 주문 요청서 엑셀파일 자동 생성 및 메일 자동화 개발
 
 -주문요청서 브랜드사 별 엑셀파일 분류, parsing, form, email list 생성 및 자동 발송
 - language: python

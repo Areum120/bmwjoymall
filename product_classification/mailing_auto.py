@@ -53,7 +53,7 @@ class SendEmail:
             print("발송 성공")
 
 # #인스턴스 생성
-# es = SendEmail('tjfsu120@gmail.com', 'lkpwbqanankfmlaq', 'email_list.xlsx')#생성된 이메일리스트 따로 입력하지 않아도 자동입력, 계정 pw만 외부에서 입력받기
+# es = SendEmail('EMAIL', 'SECONDPW', 'email_list.xlsx')#생성된 이메일리스트 따로 입력하지 않아도 자동입력, 계정 pw만 외부에서 입력받기
 # #메소드 호출
 # es.send_email()
 

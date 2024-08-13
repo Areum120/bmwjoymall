@@ -36,13 +36,12 @@ dist 폴더 안에 필수 data file 이동시키기
 - 파일명 변경x
 - 구글 이메일 계정으로 자동발송 시 구글 2단계 인증 설정 필요(2단계 설정 불가능 시 보안단계 낮추기)
 
-##24.08.13 update
+# 24.08.13 update
 C:\Users\tjfsu\Desktop\2023\크몽\AutoEase_rpa>pyinstaller --onefile --noconsole step2/excel_clsfn.py
 'pyinstaller'은(는) 내부 또는 외부 명령, 실행할 수 있는 프로그램, 또는
 배치 파일이 아닙니다. 오류시 
 
-###
-설치 경로 찾기
+### 설치 경로 찾기
 python -m site --user-site
 
 예를 들어 아래 경로로 나오면 아래 경로 Scripts 폴더 안에 설치 되어 있음.

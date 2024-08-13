@@ -49,3 +49,7 @@ C:\Users\USERNAME\AppData\Roaming\Python\PythonXX\site-packages
 
 아래 명령어로 설치하면 됨
 C:\Users\USERNAME\AppData\Roaming\Python\PythonXX\Scripts\pyinstaller.exe --onefile --noconsole step2/order_rpa/excel_clsfn.py
+
+import한 send_email.py 누락되면
+
+C:\Users\tjfsu\AppData\Roaming\Python\Python37\Scripts\pyinstaller -w -F --hidden-import=send_email order_rpa/excel_clsfn.py
